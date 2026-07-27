@@ -1,1 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Last Post – Notify your loved ones when the time comes</title>
+  <meta name="description" content="Last Post is the iOS app that notifies your contacts when you pass away, shares your memories, and passes on your final wishes." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --purple: #7B35E8;
+      --purple-dark: #5A1FC8;
+      --purple-light: #A86EF5;
+      --text: #1a1a2e;
+      --text-soft: #555577;
+      --bg: #ffffff;
+      --bg-alt: #f8f7fc;
+      --gold: #C9A227;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--purple);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-soft);
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--purple); }
+    .btn {
+      display: inline-block;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary { background: var(--purple); color: #fff; }
+    .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+    .btn-outline { border: 2px solid var(--purple); color: var(--purple); background: transparent; }
+    .btn-outline:hover { background: var(--purple); color: #fff; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #5A1FC8 0%, #7B35E8 50%, #A86EF5 100%);
+      color: #fff;
+      padding: 100px 40px 80px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.15;
+      max-width: 700px;
+      margin: 0 auto 20px;
+    }
+    .hero p { font-size: 1.15rem; opacity: 0.88; max-width: 520px; margin: 0 auto 40px; }
+    .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-white { background: #fff; color: var(--purple); font-weight: 700; }
+    .btn-white:hover { background: #f0e8ff; transform: translateY(-1px); }
+    .btn-ghost { border: 2px solid rgba(255,255,255,0.6); color: #fff; background: transparent; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.15); }
+    .hero-sub { margin-top: 20px; font-size: 0.85rem; opacity: 0.65; }
+
+    /* SECTIONS */
+    section { padding: 80px 40px; max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--purple); margin-bottom: 12px;
+    }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; line-height: 1.25; margin-bottom: 16px; }
+    .section-sub { font-size: 1.05rem; color: var(--text-soft); max-width: 540px; margin-bottom: 56px; }
+
+    /* HOW IT WORKS */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; }
+    .step { background: var(--bg-alt); border-radius: var(--radius); padding: 32px 28px; }
+    .step-number {
+      width: 40px; height: 40px; border-radius: 50%; background: var(--purple);
+      color: #fff; font-weight: 700; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center; margin-bottom: 18px;
+    }
+    .step h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .step p { color: var(--text-soft); font-size: 0.95rem; }
+
+    /* FEATURES */
+    .features-bg { background: var(--bg-alt); }
+    .features-inner { max-width: 1100px; margin: 0 auto; padding: 80px 40px; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+    .feature-card {
+      background: #fff; border-radius: var(--radius); padding: 28px 24px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .feature-icon { font-size: 1.8rem; margin-bottom: 14px; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .feature-card p { font-size: 0.9rem; color: var(--text-soft); }
+    .premium-badge {
+      display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold);
+      border-radius: 50px; padding: 2px 8px; margin-bottom: 10px;
+    }
+
+    /* PRICING */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 680px; }
+    .plan { border-radius: var(--radius); padding: 36px 30px; border: 2px solid rgba(0,0,0,0.08); }
+    .plan-premium {
+      background: linear-gradient(135deg, #5A1FC8, #7B35E8);
+      color: #fff; border-color: transparent; position: relative; overflow: hidden;
+    }
+    .plan-premium::before {
+      content: "Most Popular"; position: absolute; top: 16px; right: -28px;
+      background: var(--gold); color: #fff; font-size: 0.7rem; font-weight: 700;
+      padding: 4px 36px; transform: rotate(45deg); letter-spacing: 0.05em;
+    }
+    .plan-name { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; margin-bottom: 8px; }
+    .plan-premium .plan-name { opacity: 0.8; }
+    .plan-price { font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+    .plan-period { font-size: 0.85rem; opacity: 0.6; margin-bottom: 28px; }
+    .plan ul { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+    .plan ul li { font-size: 0.93rem; display: flex; align-items: flex-start; gap: 8px; }
+    .plan ul li::before { content: "✓"; font-weight: 700; flex-shrink: 0; }
+    .plan-free ul li::before { color: var(--purple); }
+    .plan-premium ul li::before { color: #d4aaff; }
+    .plan-free .plan-price { color: var(--purple); }
+    .plan-free .plan-period { color: var(--text-soft); }
+
+    /* FOOTER */
+    footer { background: var(--text); color: rgba(255,255,255,0.6); padding: 48px 40px; text-align: center; }
+    .footer-logo { font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 16px; }
+    .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; }
+    .footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-links a:hover { color: #fff; }
+    .footer-copy { font-size: 0.82rem; }
+
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; }
+      .nav-links { gap: 16px; }
+      .hero { padding: 72px 20px 60px; }
+      section { padding: 60px 20px; }
+      .features-inner { padding: 60px 20px; }
+      footer { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">Last Post</a>
+  <div class="nav-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="/privacy.html">Privacy</a>
+    <a class="btn btn-primary" href="https://apps.apple.com/app/id6794668376">Download</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Available on iOS</div>
+  <h1>Your loved ones will know when the time comes.</h1>
+  <p>Last Post notifies your contacts, shares your memories, and passes on your final wishes — automatically, when you're gone.</p>
+  <div class="hero-cta">
+    <a class="btn btn-white" href="https://apps.apple.com/app/id6794668376">Download on the App Store</a>
+    <a class="btn btn-ghost" href="#how-it-works">See how it works</a>
+  </div>
+  <p class="hero-sub">Free to get started &nbsp;·&nbsp; No credit card required</p>
+</div>
+
+<section id="how-it-works">
+  <p class="section-label">How it works</p>
+  <h2>Simple, dignified, and private.</h2>
+  <p class="section-sub">Set it up once and Last Post takes care of everything at the right time.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-number">1</div>
+      <h3>Add your contacts</h3>
+      <p>Add the people you'd like to be notified — family, friends, colleagues. They'll be invited to confirm their details.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">2</div>
+      <h3>Choose a designated person</h3>
+      <p>Appoint someone you trust to trigger the notification process when the time comes. They'll have a dedicated view in the app.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <h3>We handle the rest</h3>
+      <p>Your designated person confirms the news and every contact on your list receives a personal, compassionate notification.</p>
+    </div>
+  </div>
+</section>
+
+<div class="features-bg">
+  <div class="features-inner" id="features">
+    <p class="section-label">Features</p>
+    <h2>Everything in one place.</h2>
+    <p class="section-sub">Last Post keeps your legacy organised so your loved ones don't have to search for anything.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h3>Contact list</h3>
+        <p>Store up to 5 contacts on the free plan. Premium removes the limit entirely.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔑</div>
+        <h3>Designated person</h3>
+        <p>One trusted person who can trigger your notification and view your arrangements when needed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📸</div>
+        <h3>Memories</h3>
+        <p>Upload photos and captions to be shared exclusively with your designated person after notification.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💌</div>
+        <h3>Personalised emails</h3>
+        <p>Each contact receives a thoughtful, personalised notification — not a generic broadcast.</p>
+      </div>
+      <div class="feature-card">
+        <div class="premium-badge">Premium</div>
+        <div class="feature-icon">❤️</div>
+        <h3>Welfare check</h3>
+        <p>Regular liveness checks that automatically trigger the process if you stop responding.</p>
+      </div>
+      <div class="feature-card">
+        <div class="premium-badge">Premium</div>
+        <div class="feature-icon">📄</div>
+        <h3>Legacy planning</h3>
+        <p>Store funeral wishes, important documents, and digital asset details — all passed on securely.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="pricing">
+  <p class="section-label">Pricing</p>
+  <h2>Start for free.</h2>
+  <p class="section-sub">Last Post is free for the essentials. Upgrade for unlimited contacts and advanced features.</p>
+  <div class="pricing-grid">
+    <div class="plan plan-free">
+      <p class="plan-name">Free</p>
+      <p class="plan-price">£0</p>
+      <p class="plan-period">forever</p>
+      <ul>
+        <li>Up to 5 contacts</li>
+        <li>1 designated person</li>
+        <li>Photo memories</li>
+        <li>Personalised notification emails</li>
+        <li>Designated person app view</li>
+      </ul>
+      <a class="btn btn-outline" href="https://apps.apple.com/app/id6794668376">Get started free</a>
+    </div>
+    <div class="plan plan-premium">
+      <p class="plan-name">Premium</p>
+      <p class="plan-price">£19.99</p>
+      <p class="plan-period">per year</p>
+      <ul>
+        <li>Unlimited contacts</li>
+        <li>Multiple designated persons</li>
+        <li>Welfare / liveness check</li>
+        <li>Funeral wishes &amp; documents</li>
+        <li>Digital asset inventory</li>
+        <li>Priority support</li>
+      </ul>
+      <a class="btn btn-white" href="https://apps.apple.com/app/id6794668376">Start free trial</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="footer-logo">Last Post</p>
+  <div class="footer-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="mailto:support@lastpost.app">Support</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 Last Post. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
