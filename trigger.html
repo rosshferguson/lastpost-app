@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Last Post — Send Notifications</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f2f2f7;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 16px 60px;
+    color: #1c1c1e;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px 32px;
+    max-width: 520px;
+    width: 100%;
+    border: 1px solid #e5e5ea;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+  }
+
+  .logo {
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .brand {
+    font-size: 13px;
+    font-weight: 600;
+    color: #aeaeb2;
+    text-align: center;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: #636366;
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .info-box {
+    background: #f9f9f9;
+    border: 1px solid #e5e5ea;
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 28px;
+  }
+
+  .info-box p { font-size: 15px; line-height: 1.6; color: #3c3c43; }
+  .info-box strong { color: #1c1c1e; }
+
+  .info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f2f2f7;
+    font-size: 15px;
+  }
+  .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .info-row .label { color: #636366; min-width: 120px; }
+  .info-row .value { font-weight: 600; color: #1c1c1e; }
+
+  .warning-box {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    font-size: 14px;
+    color: #3c3c43;
+    line-height: 1.6;
+  }
+
+  .warning-box strong { color: #1c1c1e; }
+
+  .danger-box {
+    background: #fff1f0;
+    border: 1px solid #ff3b30;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    font-size: 14px;
+    color: #3c3c43;
+    line-height: 1.6;
+  }
+
+  .danger-box strong { color: #ff3b30; }
+
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #3c3c43;
+    margin-bottom: 8px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e5e5ea;
+    border-radius: 12px;
+    font-size: 18px;
+    font-family: inherit;
+    text-align: center;
+    letter-spacing: 0.08em;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 20px;
+  }
+
+  input[type="text"]:focus { border-color: #ff3b30; }
+  input[type="text"].valid { border-color: #34c759; }
+
+  .btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+  .btn-primary {
+    background: #007aff;
+    color: #fff;
+  }
+
+  .btn-danger {
+    background: #ff3b30;
+    color: #fff;
+  }
+
+  .btn-secondary {
+    background: #f2f2f7;
+    color: #007aff;
+    margin-top: 10px;
+  }
+
+  .step { display: none; }
+  .step.active { display: block; }
+
+  .spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .success-icon { font-size: 56px; text-align: center; margin-bottom: 16px; }
+
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: #aeaeb2;
+    margin-top: 28px;
+  }
+
+  .footer a { color: #aeaeb2; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">🕊️</div>
+  <div class="brand">Last Post</div>
+
+  <!-- Step: Loading -->
+  <div class="step active" id="step-loading">
+    <h1>Loading…</h1>
+    <p class="subtitle">Looking up your account details.</p>
+  </div>
+
+  <!-- Step: Invalid token -->
+  <div class="step" id="step-invalid">
+    <h1>Link not found</h1>
+    <p class="subtitle">
+      This link is invalid or has expired. Please check the invitation email and
+      try again, or contact the person who set up Last Post.
+    </p>
+    <div class="footer">
+      <a href="https://lastpost.app">lastpost.app</a>
+    </div>
+  </div>
+
+  <!-- Step 1: Confirm identity and intent -->
+  <div class="step" id="step-1">
+    <h1 id="s1-heading">You are about to send notifications</h1>
+    <p class="subtitle" id="s1-subtitle">Please read carefully before continuing.</p>
+
+    <div class="info-box">
+      <div class="info-row">
+        <span class="label">Account holder</span>
+        <span class="value" id="s1-owner">—</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Your name</span>
+        <span class="value" id="s1-dp">—</span>
+      </div>
+      <div class="info-row">
+        <span class="label">People to notify</span>
+        <span class="value" id="s1-count">—</span>
+      </div>
+    </div>
+
+    <div class="warning-box">
+      <strong>What will happen:</strong> Each person on <span id="s1-owner-inline">the account holder</span>'s
+      contact list will receive an email (and SMS if a phone number was saved) informing them
+      of their passing. <strong>This cannot be undone.</strong>
+    </div>
+
+    <button class="btn btn-primary" onclick="goToStep2()">I understand — continue →</button>
+    <button class="btn btn-secondary" onclick="window.close()">Cancel</button>
+  </div>
+
+  <!-- Step 2: Type CONFIRM -->
+  <div class="step" id="step-2">
+    <h1>Final confirmation</h1>
+    <p class="subtitle">
+      Type <strong>SEND</strong> in the box below to confirm you want to
+      notify <span id="s2-count">everyone</span> on the list.
+    </p>
+
+    <div class="danger-box">
+      <strong>This action is irreversible.</strong> Once you press the button,
+      emails will be sent immediately and cannot be recalled.
+    </div>
+
+    <label for="confirm-input">Type SEND to confirm</label>
+    <input type="text" id="confirm-input" placeholder="SEND"
+           oninput="checkConfirmInput()" autocomplete="off" autocorrect="off"
+           autocapitalize="characters" spellcheck="false">
+
+    <button class="btn btn-danger" id="send-btn" disabled onclick="triggerNotifications()">
+      Send notifications
+    </button>
+    <button class="btn btn-secondary" onclick="goToStep1()">← Go back</button>
+  </div>
+
+  <!-- Step: Sending -->
+  <div class="step" id="step-sending">
+    <h1><span class="spinner"></span>Sending…</h1>
+    <p class="subtitle">Please keep this page open while notifications are sent.</p>
+  </div>
+
+  <!-- Step: Success -->
+  <div class="step" id="step-success">
+    <div class="success-icon">✅</div>
+    <h1>Notifications sent</h1>
+    <p class="subtitle" id="success-msg">
+      Everyone on the list has been notified. You can close this page.
+    </p>
+
+    <div class="info-box" style="margin-top:24px">
+      <p style="font-size:14px;color:#636366;line-height:1.6">
+        Last Post has sent an email to each person on <span id="success-owner">the account holder</span>'s
+        contact list informing them of their passing. You don't need to do anything else.
+      </p>
+    </div>
+
+    <div class="footer">
+      <a href="https://lastpost.app">lastpost.app</a>
+    </div>
+  </div>
+
+  <!-- Step: Error -->
+  <div class="step" id="step-error">
+    <h1>Something went wrong</h1>
+    <p class="subtitle" id="error-msg">
+      The notifications could not be sent. Please try again or email
+      <a href="mailto:support@lastpost.app">support@lastpost.app</a>.
+    </p>
+    <button class="btn btn-primary" style="margin-top:16px" onclick="retryTrigger()">Try again</button>
+    <div class="footer" style="margin-top:16px">
+      <a href="https://lastpost.app">lastpost.app</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const SUPABASE_FUNCTIONS = 'https://kypzbbupzuaukdkjeghu.supabase.co/functions/v1'
+
+  let ownerName     = ''
+  let dpName        = ''
+  let contactCount  = 0
+  let triggerToken  = ''
+
+  // ── Helpers ──────────────────────────────────────────────────────────────────
+
+  function showStep(id) {
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'))
+    document.getElementById(id).classList.add('active')
+  }
+
+  function goToStep1() { showStep('step-1') }
+
+  function goToStep2() { showStep('step-2') }
+
+  function checkConfirmInput() {
+    const val = document.getElementById('confirm-input').value.trim().toUpperCase()
+    const btn = document.getElementById('send-btn')
+    const input = document.getElementById('confirm-input')
+    if (val === 'SEND') {
+      btn.disabled = false
+      input.classList.add('valid')
+    } else {
+      btn.disabled = true
+      input.classList.remove('valid')
+    }
+  }
+
+  // ── Load trigger info on page load ───────────────────────────────────────────
+
+  async function loadTriggerInfo() {
+    const params = new URLSearchParams(window.location.search)
+    triggerToken = params.get('token') || ''
+
+    if (!triggerToken) {
+      showStep('step-invalid')
+      return
+    }
+
+    try {
+      const res = await fetch(`${SUPABASE_FUNCTIONS}/get-trigger-info?token=${encodeURIComponent(triggerToken)}`)
+      const data = await res.json()
+
+      if (!data.found) {
+        showStep('step-invalid')
+        return
+      }
+
+      ownerName    = data.ownerName    || 'the account holder'
+      dpName       = data.designatedPersonName || 'you'
+      contactCount = data.contactCount || 0
+
+      // Populate step 1
+      document.getElementById('s1-owner').textContent        = ownerName
+      document.getElementById('s1-dp').textContent           = dpName
+      document.getElementById('s1-count').textContent        = contactCount === 1
+        ? '1 person' : `${contactCount} people`
+      document.getElementById('s1-owner-inline').textContent = ownerName
+      document.getElementById('s2-count').textContent        = contactCount === 1
+        ? '1 person' : `${contactCount} people`
+      document.getElementById('success-owner').textContent   = ownerName
+
+      showStep('step-1')
+    } catch (err) {
+      console.error('Failed to load trigger info:', err)
+      showStep('step-invalid')
+    }
+  }
+
+  // ── Send notifications ────────────────────────────────────────────────────────
+
+  async function triggerNotifications() {
+    showStep('step-sending')
+
+    try {
+      const res = await fetch(`${SUPABASE_FUNCTIONS}/web-trigger-notifications`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ token: triggerToken }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok || !data.ok) {
+        const msg = data.error || 'Unknown error'
+        document.getElementById('error-msg').textContent =
+          `The notifications could not be sent: ${msg}. Please try again or email support@lastpost.app.`
+        showStep('step-error')
+        return
+      }
+
+      const notified = data.notified ?? 0
+      const total    = data.total    ?? 0
+      document.getElementById('success-msg').textContent =
+        `${notified} of ${total} ${total === 1 ? 'person has' : 'people have'} been notified. You can close this page.`
+
+      showStep('step-success')
+    } catch (err) {
+      console.error('Trigger failed:', err)
+      document.getElementById('error-msg').textContent =
+        'A network error occurred. Please check your connection and try again.'
+      showStep('step-error')
+    }
+  }
+
+  function retryTrigger() {
+    showStep('step-2')
+    document.getElementById('confirm-input').value = ''
+    document.getElementById('send-btn').disabled = true
+    document.getElementById('confirm-input').classList.remove('valid')
+  }
+
+  // ── Start ─────────────────────────────────────────────────────────────────────
+
+  loadTriggerInfo()
+</script>
+
+</body>
+</html>
