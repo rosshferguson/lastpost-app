@@ -12,6 +12,8 @@
       --purple: #7B35E8;
       --purple-dark: #5A1FC8;
       --purple-light: #A86EF5;
+      --green: #173027;
+      --green-mid: #1f4035;
       --text: #1a1a2e;
       --text-soft: #555577;
       --bg: #ffffff;
@@ -93,7 +95,7 @@
 
     /* HERO */
     .hero {
-      background: linear-gradient(135deg, #3d0fa0 0%, #5A1FC8 40%, #7B35E8 70%, #A86EF5 100%);
+      background: linear-gradient(135deg, #0f2219 0%, #173027 50%, #1f4035 100%);
       color: #fff;
       padding: 80px 40px 0;
       overflow: hidden;
@@ -330,8 +332,58 @@
     .cta-band p { color: var(--text-soft); max-width: 480px; margin: 0 auto 36px; font-size: 1.05rem; }
     .cta-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; align-items: center; }
 
+    /* SCREENSHOTS ROW */
+    .screenshots-bg { background: var(--green); padding: 80px 40px; }
+    .screenshots-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
+    .screenshots-inner h2 { color: #fff; margin-bottom: 14px; }
+    .screenshots-inner p { color: rgba(255,255,255,0.65); max-width: 520px; margin: 0 auto 52px; font-size: 1.05rem; }
+    .screenshots-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: flex-end;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .screenshot-phone {
+      background: #0d1f18;
+      border-radius: 36px;
+      padding: 10px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    }
+    .screenshot-phone.middle { transform: scale(1.06); }
+    .screenshot-phone img {
+      width: 100%;
+      border-radius: 28px;
+      display: block;
+    }
+    .screenshot-label {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.78rem;
+      margin-top: 16px;
+      font-weight: 500;
+    }
+
+    /* PULL QUOTE */
+    .pull-quote {
+      background: var(--bg-alt);
+      padding: 72px 40px;
+      text-align: center;
+    }
+    .pull-quote blockquote {
+      font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+      font-weight: 700;
+      color: var(--text);
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+    }
+    .pull-quote blockquote::before { content: '\201C'; color: var(--purple); }
+    .pull-quote blockquote::after { content: '\201D'; color: var(--purple); }
+
     /* FOOTER */
-    footer { background: var(--text); color: rgba(255,255,255,0.55); padding: 48px 40px; }
+    footer { background: var(--green); color: rgba(255,255,255,0.55); padding: 48px 40px; }
     .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 20px; }
     .footer-brand {
       display: flex; align-items: center; gap: 10px;
@@ -394,7 +446,7 @@
         Available now on the App Store
       </div>
       <p class="hero-app-name">Last Post</p>
-      <h1>When you're gone, they'll know.</h1>
+      <h1>Making difficult times a little easier.</h1>
       <p>Last Post notifies your loved ones, shares your legacy, and passes on your final wishes — so they don't have to piece it together in their worst moments.</p>
       <div class="hero-cta">
         <a class="btn btn-white" href="https://apps.apple.com/app/id6794668376">
@@ -427,6 +479,34 @@
     <span class="trust-item"><span>✉️</span><span>Email &amp; SMS notifications</span></span>
     <span class="trust-item"><span>🆓</span><span>Free to get started</span></span>
   </p>
+</div>
+
+<!-- PULL QUOTE -->
+<div class="pull-quote">
+  <blockquote>Nobody wants to think about this. But leaving your loved ones with nothing is harder than taking an afternoon to sort it.</blockquote>
+</div>
+
+<!-- SCREENSHOTS -->
+<div class="screenshots-bg">
+  <div class="screenshots-inner">
+    <p class="section-label" style="color:rgba(255,255,255,0.5)">The app</p>
+    <h2>Everything in one place.</h2>
+    <p>Simple, private, and built for the moment that matters.</p>
+    <div class="screenshots-row">
+      <div class="screenshot-phone">
+        <img src="screenshot2.png" alt="Notification list" />
+        <p class="screenshot-label">Notification list</p>
+      </div>
+      <div class="screenshot-phone middle">
+        <img src="screenshot.png" alt="Home screen" />
+        <p class="screenshot-label">Home screen</p>
+      </div>
+      <div class="screenshot-phone">
+        <img src="screenshot3.png" alt="My people" />
+        <p class="screenshot-label">My people</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- HOW IT WORKS -->
@@ -517,7 +597,7 @@
 <section id="pricing">
   <p class="section-label">Pricing</p>
   <h2>Start for free.</h2>
-  <p class="section-sub">Last Post is free for the essentials. Upgrade for unlimited contacts and advanced features.</p>
+  <p class="section-sub">Last Post is free for the essentials. Upgrade for unlimited contacts and advanced features. Pricing shown in GBP — local pricing applies in your region.</p>
   <div class="pricing-grid">
     <div class="plan plan-free">
       <p class="plan-name">Free</p>
