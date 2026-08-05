@@ -50,16 +50,14 @@
       width: 36px;
       height: 36px;
       border-radius: 9px;
-      background: linear-gradient(135deg, #5A1FC8, #A86EF5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      overflow: hidden;
       flex-shrink: 0;
     }
-    .nav-logo-icon svg {
-      width: 20px;
-      height: 20px;
-      fill: white;
+    .nav-logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .nav-logo-text {
       font-size: 1.2rem;
@@ -415,10 +413,9 @@
     }
     .footer-logo-icon {
       width: 32px; height: 32px; border-radius: 8px;
-      background: linear-gradient(135deg, #5A1FC8, #A86EF5);
-      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0;
     }
-    .footer-logo-icon svg { width: 18px; height: 18px; fill: white; }
+    .footer-logo-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .footer-logo-text { font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: -0.01em; }
     .footer-links { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
     .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
@@ -450,9 +447,7 @@
 <nav>
   <a class="nav-brand" href="/">
     <div class="nav-logo-icon">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
-      </svg>
+      <img src="icon.png" alt="Last Post" />
     </div>
     <span class="nav-logo-text">Last Post</span>
   </a>
@@ -695,9 +690,7 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <div class="footer-logo-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
-        </svg>
+        <img src="icon.png" alt="Last Post" />
       </div>
       <span class="footer-logo-text">Last Post</span>
     </div>
