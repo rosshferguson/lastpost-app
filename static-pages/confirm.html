@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Last Post — Confirm</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f2f7;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.card{background:#fff;border-radius:16px;padding:40px 32px;max-width:420px;width:100%;text-align:center;box-shadow:0 2px 16px rgba(0,0,0,.08)}
+.icon{font-size:48px;margin-bottom:20px}
+h1{font-size:21px;font-weight:700;color:#1c1c1e;margin-bottom:12px}
+p{font-size:15px;color:#6c6c70;line-height:1.6;margin-bottom:28px}
+button{background:#34c759;color:#fff;border:none;border-radius:12px;padding:14px 0;font-size:17px;font-weight:600;cursor:pointer;width:100%;margin-bottom:12px}
+button.decline{background:#ff3b30}
+.brand{font-size:13px;color:#aeaeb2;margin-top:20px}
+.loading{display:none;font-size:15px;color:#6c6c70;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon" id="icon">✉️</div>
+  <h1 id="title">Confirm your notification preference</h1>
+  <p id="message">Click below to confirm you're happy to be notified via Last Post.</p>
+  <button id="btn-accept" type="button" onclick="submit('accept')">Yes, notify me</button>
+  <button id="btn-decline" class="decline" type="button" onclick="submit('decline')" style="display:none">Yes, remove me</button>
+  <p class="loading" id="loading">Processing…</p>
+  <p class="brand">Last Post</p>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://kypzbbupzuaukdkjeghu.supabase.co'
+
+const params = new URLSearchParams(window.location.search)
+const token  = params.get('token')
+const action = (params.get('action') || 'accept').toLowerCase()
+const type   = (params.get('type') || 'contact').toLowerCase()
+
+// Customise UI based on type and action
+if (type === 'designated') {
+  document.getElementById('icon').textContent = '🤝'
+  document.getElementById('title').textContent = 'Accept your role as Designated Person'
+  document.getElementById('message').textContent = "Click below to confirm you're happy to help notify loved ones when the time comes."
+  document.getElementById('btn-accept').textContent = '✓ Accept invitation'
+} else if (action === 'decline') {
+  document.getElementById('icon').textContent = '👋'
+  document.getElementById('title').textContent = 'Remove me from this list'
+  document.getElementById('message').textContent = "Click below to confirm you'd like to be removed from the notification list."
+  document.getElementById('btn-accept').style.display = 'none'
+  document.getElementById('btn-decline').style.display = 'block'
+}
+
+async function submit(chosenAction) {
+  if (!token) { window.location.href = '/expired.html'; return }
+
+  document.getElementById('btn-accept').disabled = true
+  document.getElementById('btn-decline').disabled = true
+  document.getElementById('loading').style.display = 'block'
+
+  const endpoint = type === 'designated'
+    ? `${SUPABASE_URL}/functions/v1/accept-designated-invitation`
+    : `${SUPABASE_URL}/functions/v1/accept-contact-invitation`
+
+  const body = new URLSearchParams({ token, action: chosenAction })
+
+  try {
+    const res = await fetch(`${endpoint}?token=${encodeURIComponent(token)}&action=${encodeURIComponent(chosenAction)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString(),
+      redirect: 'follow'
+    })
+
+    // Functions redirect to accepted/declined/expired pages on lastpost.app
+    if (res.redirected) {
+      window.location.href = res.url
+    } else if (res.ok) {
+      window.location.href = chosenAction === 'decline' ? '/declined.html' : (type === 'designated' ? '/accepted-designated.html' : '/accepted.html')
+    } else {
+      window.location.href = '/error.html'
+    }
+  } catch (e) {
+    window.location.href = '/error.html'
+  }
+}
+</script>
+</body>
+</html>
