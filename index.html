@@ -12,6 +12,8 @@
       --purple: #7B35E8;
       --purple-dark: #5A1FC8;
       --purple-light: #A86EF5;
+      --green: #173027;
+      --green-mid: #1f4035;
       --text: #1a1a2e;
       --text-soft: #555577;
       --bg: #ffffff;
@@ -47,9 +49,9 @@
       text-decoration: none;
     }
     .nav-logo-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 9px;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
       overflow: hidden;
       flex-shrink: 0;
     }
@@ -86,14 +88,14 @@
       cursor: pointer;
       border: none;
     }
-    .btn-primary { background: var(--purple); color: #fff; }
-    .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(123,53,232,0.35); }
+    .btn-primary { background: var(--green); color: #fff !important; }
+    .btn-primary:hover { background: var(--green-mid); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(23,48,39,0.35); }
     .btn-outline { border: 2px solid var(--purple); color: var(--purple); background: transparent; }
     .btn-outline:hover { background: var(--purple); color: #fff; }
 
     /* HERO */
     .hero {
-      background: linear-gradient(135deg, #3d0fa0 0%, #5A1FC8 40%, #7B35E8 70%, #A86EF5 100%);
+      background: linear-gradient(135deg, #0f2219 0%, #173027 50%, #1f4035 100%);
       color: #fff;
       padding: 80px 40px 0;
       overflow: hidden;
@@ -194,93 +196,18 @@
       z-index: 2;
     }
     .phone-screen {
-      background: #f2f2f7;
       border-radius: 34px;
       overflow: hidden;
       height: 520px;
       position: relative;
     }
-    .phone-screen-header {
-      background: linear-gradient(135deg, #5A1FC8, #A86EF5);
-      padding: 44px 18px 20px;
-      color: white;
-    }
-    .phone-screen-header .greeting {
-      font-size: 0.65rem;
-      opacity: 0.75;
-      margin-bottom: 2px;
-    }
-    .phone-screen-header .name {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-    .phone-readiness {
-      background: rgba(255,255,255,0.18);
-      border-radius: 12px;
-      padding: 10px 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .phone-readiness-bar {
-      flex: 1;
-      height: 4px;
-      background: rgba(255,255,255,0.25);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .phone-readiness-fill {
-      width: 60%;
+    .phone-screen img {
+      width: 100%;
       height: 100%;
-      background: #fff;
-      border-radius: 2px;
+      object-fit: cover;
+      object-position: top;
+      display: block;
     }
-    .phone-readiness-label { font-size: 0.6rem; opacity: 0.85; white-space: nowrap; }
-    .phone-body { padding: 14px; }
-    .phone-section-title { font-size: 0.6rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; margin-top: 12px; }
-    .phone-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 7px;
-      margin-bottom: 12px;
-    }
-    .phone-card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 10px 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.07);
-    }
-    .phone-card-icon { font-size: 1rem; }
-    .phone-card-label { font-size: 0.55rem; font-weight: 600; color: var(--text); }
-    .phone-checklist-item {
-      background: #fff;
-      border-radius: 9px;
-      padding: 8px 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 5px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    }
-    .phone-check-circle {
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      border: 2px solid #d0d0d0;
-      flex-shrink: 0;
-    }
-    .phone-check-circle.done {
-      background: #34C759;
-      border-color: #34C759;
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 0.5rem; font-weight: 700;
-    }
-    .phone-check-text { font-size: 0.55rem; color: #333; }
-    .phone-check-text.done { text-decoration: line-through; color: #aaa; }
 
     /* TRUST STRIP */
     .trust-strip {
@@ -405,8 +332,58 @@
     .cta-band p { color: var(--text-soft); max-width: 480px; margin: 0 auto 36px; font-size: 1.05rem; }
     .cta-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; align-items: center; }
 
+    /* SCREENSHOTS ROW */
+    .screenshots-bg { background: var(--green); padding: 80px 40px; }
+    .screenshots-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
+    .screenshots-inner h2 { color: #fff; margin-bottom: 14px; }
+    .screenshots-inner p { color: rgba(255,255,255,0.65); max-width: 520px; margin: 0 auto 52px; font-size: 1.05rem; }
+    .screenshots-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: flex-end;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .screenshot-phone {
+      background: #0d1f18;
+      border-radius: 36px;
+      padding: 10px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    }
+    .screenshot-phone.middle { transform: scale(1.06); }
+    .screenshot-phone img {
+      width: 100%;
+      border-radius: 28px;
+      display: block;
+    }
+    .screenshot-label {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.78rem;
+      margin-top: 16px;
+      font-weight: 500;
+    }
+
+    /* PULL QUOTE */
+    .pull-quote {
+      background: var(--bg-alt);
+      padding: 72px 40px;
+      text-align: center;
+    }
+    .pull-quote blockquote {
+      font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+      font-weight: 700;
+      color: var(--text);
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+    }
+    .pull-quote blockquote::before { content: '\201C'; color: var(--purple); }
+    .pull-quote blockquote::after { content: '\201D'; color: var(--purple); }
+
     /* FOOTER */
-    footer { background: var(--text); color: rgba(255,255,255,0.55); padding: 48px 40px; }
+    footer { background: var(--green); color: rgba(255,255,255,0.55); padding: 48px 40px; }
     .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 20px; }
     .footer-brand {
       display: flex; align-items: center; gap: 10px;
@@ -469,7 +446,7 @@
         Available now on the App Store
       </div>
       <p class="hero-app-name">Last Post</p>
-      <h1>When you're gone, they'll know.</h1>
+      <h1>Making difficult times a little easier.</h1>
       <p>Last Post notifies your loved ones, shares your legacy, and passes on your final wishes — so they don't have to piece it together in their worst moments.</p>
       <div class="hero-cta">
         <a class="btn btn-white" href="https://apps.apple.com/app/id6794668376">
@@ -486,55 +463,7 @@
       <div class="phone">
         <div class="phone-notch"></div>
         <div class="phone-screen">
-          <div class="phone-screen-header">
-            <p class="greeting">Good morning</p>
-            <p class="name">Ross 👋</p>
-            <div class="phone-readiness">
-              <div style="font-size:0.6rem; opacity:0.85">Readiness</div>
-              <div class="phone-readiness-bar">
-                <div class="phone-readiness-fill"></div>
-              </div>
-              <div class="phone-readiness-label">60%</div>
-            </div>
-          </div>
-          <div class="phone-body">
-            <p class="phone-section-title">Quick actions</p>
-            <div class="phone-cards">
-              <div class="phone-card">
-                <div class="phone-card-icon">👥</div>
-                <div class="phone-card-label">Contacts</div>
-              </div>
-              <div class="phone-card">
-                <div class="phone-card-icon">🔑</div>
-                <div class="phone-card-label">My People</div>
-              </div>
-              <div class="phone-card">
-                <div class="phone-card-icon">📋</div>
-                <div class="phone-card-label">Legacy</div>
-              </div>
-              <div class="phone-card">
-                <div class="phone-card-icon">❤️</div>
-                <div class="phone-card-label">Wellness</div>
-              </div>
-            </div>
-            <p class="phone-section-title">Get set up · 2 of 4</p>
-            <div class="phone-checklist-item">
-              <div class="phone-check-circle done">✓</div>
-              <div class="phone-check-text done">Add your first contact</div>
-            </div>
-            <div class="phone-checklist-item">
-              <div class="phone-check-circle done">✓</div>
-              <div class="phone-check-text done">Choose a designated person</div>
-            </div>
-            <div class="phone-checklist-item">
-              <div class="phone-check-circle"></div>
-              <div class="phone-check-text">Set your check-in date</div>
-            </div>
-            <div class="phone-checklist-item">
-              <div class="phone-check-circle"></div>
-              <div class="phone-check-text">Add your funeral wishes</div>
-            </div>
-          </div>
+          <img src="screenshot.png" alt="Last Post app screenshot" />
         </div>
       </div>
     </div>
@@ -550,6 +479,34 @@
     <span class="trust-item"><span>✉️</span><span>Email &amp; SMS notifications</span></span>
     <span class="trust-item"><span>🆓</span><span>Free to get started</span></span>
   </p>
+</div>
+
+<!-- PULL QUOTE -->
+<div class="pull-quote">
+  <blockquote>Nobody wants to think about this. But leaving your loved ones with nothing is harder than taking an afternoon to sort it.</blockquote>
+</div>
+
+<!-- SCREENSHOTS -->
+<div class="screenshots-bg">
+  <div class="screenshots-inner">
+    <p class="section-label" style="color:rgba(255,255,255,0.5)">The app</p>
+    <h2>Everything in one place.</h2>
+    <p>Simple, private, and built for the moment that matters.</p>
+    <div class="screenshots-row">
+      <div class="screenshot-phone">
+        <img src="screenshot2.png" alt="Notification list" />
+        <p class="screenshot-label">Notification list</p>
+      </div>
+      <div class="screenshot-phone middle">
+        <img src="screenshot.png" alt="Home screen" />
+        <p class="screenshot-label">Home screen</p>
+      </div>
+      <div class="screenshot-phone">
+        <img src="screenshot3.png" alt="My people" />
+        <p class="screenshot-label">My people</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- HOW IT WORKS -->
@@ -640,7 +597,7 @@
 <section id="pricing">
   <p class="section-label">Pricing</p>
   <h2>Start for free.</h2>
-  <p class="section-sub">Last Post is free for the essentials. Upgrade for unlimited contacts and advanced features.</p>
+  <p class="section-sub">Last Post is free for the essentials. Upgrade for unlimited contacts and advanced features. Pricing shown in GBP — local pricing applies in your region.</p>
   <div class="pricing-grid">
     <div class="plan plan-free">
       <p class="plan-name">Free</p>
@@ -699,7 +656,7 @@
       <a href="#features">Features</a>
       <a href="#pricing">Pricing</a>
       <a href="/privacy.html">Privacy Policy</a>
-      <a href="mailto:support@lastpost.app">Support</a>
+      <a href="mailto:lastposthelp@gmail.com">Support</a>
     </div>
     <p class="footer-copy">&copy; 2026 Last Post. All rights reserved.</p>
   </div>
