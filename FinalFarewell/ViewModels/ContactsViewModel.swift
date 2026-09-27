@@ -5,10 +5,9 @@
 //  Created by Ross Ferguson on 27/06/2026.
 //
 
-
-import Foundation
-import SwiftUI
 import SwiftData
+import SwiftUI
+import Combine
 
 @MainActor
 class ContactsViewModel: ObservableObject {
@@ -63,9 +62,13 @@ class ContactsViewModel: ObservableObject {
         do {
             try context.save()
             loadContacts()
-            
+
             // Send invitation
             sendInvitation(to: contact)
+
+            // Sync full contact list to Supabase for web trigger support
+            let allContacts = contacts
+            Task { await SupabaseService.shared.syncContacts(allContacts) }
         } catch {
             errorMessage = "Failed to add contact: \(error.localizedDescription)"
         }
@@ -75,14 +78,18 @@ class ContactsViewModel: ObservableObject {
         contact.lastUpdated = Date()
         saveContext()
         loadContacts()
+        let allContacts = contacts
+        Task { await SupabaseService.shared.syncContacts(allContacts) }
     }
-    
+
     func deleteContact(_ contact: Contact) {
         guard let context = modelContext else { return }
-        
+
         context.delete(contact)
         saveContext()
         loadContacts()
+        let allContacts = contacts
+        Task { await SupabaseService.shared.syncContacts(allContacts) }
     }
     
     func verifyContact(_ contact: Contact) {
@@ -129,6 +136,13 @@ class ContactsViewModel: ObservableObject {
         }
     }
     
+    /// Pulls invitation_accepted status from Supabase and updates local SwiftData contacts.
+    func syncInvitationStatuses() async {
+        guard let context = modelContext else { return }
+        await SupabaseService.shared.syncContactInvitationStatuses(contacts: contacts, modelContext: context)
+        loadContacts()
+    }
+
     private func saveContext() {
         guard let context = modelContext else { return }
         

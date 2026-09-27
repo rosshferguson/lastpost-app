@@ -1,4 +1,9 @@
-import Foundation
+//
+//  AppConstants.swift
+//  FinalFarewell
+//
+//  Fixed: removed unused `import Combine`
+//
 
 enum AppConstants {
     static let appName = "Final Farewell"

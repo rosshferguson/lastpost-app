@@ -1,7 +1,17 @@
-import Foundation
+//
+//  MediaViewModel.swift
+//  FinalFarewell
+//
+//  Fixed: Added @MainActor to match ContactsViewModel and NotificationViewModel,
+//  preventing potential threading crashes when @Published properties are updated
+//  from async Photo loading calls.
+//
+
 import SwiftUI
+import Combine
 import SwiftData
 import PhotosUI
+import Photos
 
 @MainActor
 class MediaViewModel: ObservableObject {
@@ -26,17 +36,13 @@ class MediaViewModel: ObservableObject {
             sharedMedia = []
             return
         }
-        
         sharedMedia = user.sharedMedia.sorted { $0.createdAt > $1.createdAt }
     }
     
     func addMedia(imageData: Data, caption: String, sharedWithAll: Bool, recipientIds: [UUID]) {
         guard let context = modelContext, let user = currentUser else { return }
         
-        let media = SharedMedia(
-            imageData: imageData,
-            caption: caption
-        )
+        let media = SharedMedia(imageData: imageData, caption: caption)
         media.sharedWithAll = sharedWithAll
         media.specificRecipientIds = recipientIds
         media.owner = user

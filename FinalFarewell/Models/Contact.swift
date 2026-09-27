@@ -2,9 +2,9 @@
 //  Contact.swift
 //  FinalFarewell
 //
-//  Created by Ross Ferguson on 27/06/2026.
+//  Added:
+//  - group: optional string for contact grouping (Family, Friends, Work, etc.)
 //
-
 
 import Foundation
 import SwiftData
@@ -21,32 +21,47 @@ final class Contact {
     var createdAt: Date
     var lastUpdated: Date
     var lastVerified: Date?
-    
+
     // Consent and status
     var invitationSent: Bool
     var invitationAccepted: Bool
     var hasApp: Bool
     var linkedUserId: UUID?
-    
+
     // Notification preferences
     var wantsFuneralDetails: Bool
     var hasBeenNotified: Bool
     var notifiedAt: Date?
-    
-    // Owner of this contact entry
+
+    // Per-contact personal content
+    var personalMessage: String?
+    var videoMessageData: Data?
+    var videoMessageRecordedAt: Date?
+
+    // Grouping
+    var group: String?
+
     @Relationship(inverse: \User.contacts)
     var owner: User?
-    
+
     var fullName: String {
-        "\(firstName) \(lastName)"
+        [firstName, lastName]
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
     }
-    
+
     var needsVerification: Bool {
-        guard let lastVerified = lastVerified else { return true }
+        guard let lastVerified else { return true }
         let sixMonths: TimeInterval = 180 * 24 * 60 * 60
         return Date().timeIntervalSince(lastVerified) > sixMonths
     }
-    
+
+    var hasPersonalContent: Bool {
+        (personalMessage != nil && !(personalMessage?.isEmpty ?? true)) ||
+        videoMessageData != nil
+    }
+
     init(
         id: UUID = UUID(),
         firstName: String = "",
@@ -54,7 +69,8 @@ final class Contact {
         email: String = "",
         phoneNumber: String = "",
         relationship: String = "",
-        notes: String = ""
+        notes: String = "",
+        group: String? = nil
     ) {
         self.id = id
         self.firstName = firstName
@@ -63,6 +79,7 @@ final class Contact {
         self.phoneNumber = phoneNumber
         self.relationship = relationship
         self.notes = notes
+        self.group = group
         self.createdAt = Date()
         self.lastUpdated = Date()
         self.invitationSent = false

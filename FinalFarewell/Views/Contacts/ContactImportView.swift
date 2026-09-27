@@ -64,6 +64,7 @@ struct ContactImportView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var contactsViewModel: ContactsViewModel
 
+    @State private var showingConsent = false
     @State private var showingPicker = false
     @State private var importCandidates: [ImportCandidate] = []
     @State private var isImporting = false
@@ -112,7 +113,7 @@ struct ContactImportView: View {
                             .padding(.horizontal, 32)
 
                         Button {
-                            showingPicker = true
+                            showingConsent = true
                         } label: {
                             Label("Choose Contacts", systemImage: "person.crop.circle.badge.plus")
                                 .font(.headline)
@@ -169,6 +170,14 @@ struct ContactImportView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showingConsent) {
+                ContactImportConsentView {
+                    showingConsent = false
+                    showingPicker = true
+                } onDecline: {
+                    showingConsent = false
+                }
+            }
             .sheet(isPresented: $showingPicker) {
                 ContactPickerView { cnContacts in
                     guard !cnContacts.isEmpty else { return }
@@ -208,6 +217,121 @@ struct ContactImportView: View {
 
         isImporting = false
         importComplete = true
+    }
+}
+
+// MARK: - Consent screen shown before contacts access is requested
+
+struct ContactImportConsentView: View {
+    let onContinue: () -> Void
+    let onDecline: () -> Void
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 28) {
+                    Image(systemName: "person.2.badge.key.fill")
+                        .font(.system(size: 60))
+                        .foregroundStyle(.blue)
+                        .padding(.top, 40)
+
+                    VStack(spacing: 12) {
+                        Text("Before you continue")
+                            .font(.title2)
+                            .fontWeight(.bold)
+
+                        Text("Last Post needs access to your contacts so you can choose who to import. Here's what happens with the data:")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                    }
+
+                    VStack(alignment: .leading, spacing: 16) {
+                        ConsentPoint(
+                            icon: "hand.tap.fill",
+                            color: .blue,
+                            title: "You choose who's imported",
+                            detail: "Last Post shows you a contact picker — only the contacts you select are used. Nothing is read automatically."
+                        )
+                        ConsentPoint(
+                            icon: "server.rack",
+                            color: .purple,
+                            title: "Selected contacts are stored securely",
+                            detail: "The name, email, and phone number of contacts you import are stored on Last Post's servers so notifications can be sent when the time comes."
+                        )
+                        ConsentPoint(
+                            icon: "lock.shield.fill",
+                            color: .green,
+                            title: "Used only for death notifications",
+                            detail: "Your contacts' details are never shared with third parties or used for marketing. They exist solely to enable the notifications you set up."
+                        )
+                        ConsentPoint(
+                            icon: "trash.fill",
+                            color: .red,
+                            title: "You can remove contacts any time",
+                            detail: "Delete a contact from Last Post and their details are removed from our servers immediately."
+                        )
+                    }
+                    .padding(.horizontal)
+
+                    VStack(spacing: 12) {
+                        Button(action: onContinue) {
+                            Text("I understand, continue")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundStyle(.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
+
+                        Button(action: onDecline) {
+                            Text("Not now")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 32)
+                }
+            }
+            .navigationTitle("Import Contacts")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", action: onDecline)
+                }
+            }
+        }
+    }
+}
+
+private struct ConsentPoint: View {
+    let icon: String
+    let color: Color
+    let title: String
+    let detail: String
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 14) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(color.opacity(0.15))
+                    .frame(width: 40, height: 40)
+                Image(systemName: icon)
+                    .foregroundStyle(color)
+                    .font(.system(size: 18))
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
     }
 }
 

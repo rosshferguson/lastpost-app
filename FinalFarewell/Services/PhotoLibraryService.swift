@@ -1,4 +1,12 @@
-import Foundation
+//
+//  PhotoLibraryService.swift
+//  FinalFarewell
+//
+//  Created by Ross Ferguson on 27/06/2026.
+//
+
+
+import UIKit
 import Photos
 
 class PhotoLibraryService {

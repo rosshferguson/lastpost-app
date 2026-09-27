@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>NSContactsUsageDescription</key>
+	<string>Last Post uses your contacts so you can choose people to add to your notification list. Only contacts you select are imported. Their name, email, and phone number are stored securely on Last Post's servers and used solely to send notifications when you pass away.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Last Post uses Face ID to protect your personal information.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>lastpost</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

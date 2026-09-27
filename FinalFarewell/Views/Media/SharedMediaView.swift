@@ -1,10 +1,10 @@
-//
+////
 //  SharedMediaView.swift
 //  FinalFarewell
 //
-//  Created by Ross Ferguson on 27/06/2026.
+//  Fixed: caption edits in MediaDetailView were local @State only and never saved to the model
+//  Updated: memories are now designated person only (sharedWithAll: false)
 //
-
 
 import SwiftUI
 import PhotosUI
@@ -26,17 +26,22 @@ struct SharedMediaView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     Section {
-                        Text("Add photos and memories you'd like shared with your loved ones after you pass.")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .padding(.horizontal)
+                        HStack(spacing: 8) {
+                            Image(systemName: "lock.fill")
+                                .font(.caption)
+                                .foregroundStyle(.purple)
+                            Text("Only your designated person can see these memories, after they confirm a notification.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.horizontal)
                     }
                     
                     if mediaViewModel.sharedMedia.isEmpty {
                         ContentUnavailableView(
                             "No Memories Yet",
                             systemImage: "photo.on.rectangle.angled",
-                            description: Text("Add photos to share with your loved ones.")
+                            description: Text("Add photos to share with your designated person.")
                         )
                         .padding(.top, 40)
                     } else {
@@ -80,7 +85,7 @@ struct SharedMediaView: View {
                             mediaViewModel.addMedia(
                                 imageData: data,
                                 caption: "",
-                                sharedWithAll: true,
+                                sharedWithAll: false,
                                 recipientIds: []
                             )
                         }
@@ -96,7 +101,7 @@ struct SharedMediaView: View {
                 }
                 Button("Cancel", role: .cancel) { }
             } message: {
-                Text("Grant photo library access in Settings to automatically share your photo library with designated persons.")
+                Text("Grant photo library access in Settings to add photos from your library.")
             }
         }
     }
@@ -138,14 +143,8 @@ struct MediaDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var mediaViewModel: MediaViewModel
     
-    let media: SharedMedia
-    @State private var caption: String
+    @Bindable var media: SharedMedia
     @State private var showingDeleteConfirmation = false
-    
-    init(media: SharedMedia) {
-        self.media = media
-        _caption = State(initialValue: media.caption)
-    }
     
     var body: some View {
         NavigationStack {
@@ -159,10 +158,19 @@ struct MediaDetailView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
                     
-                    TextField("Add a caption...", text: $caption, axis: .vertical)
+                    TextField("Add a caption...", text: $media.caption, axis: .vertical)
                         .textFieldStyle(.roundedBorder)
                         .padding(.horizontal)
                     
+                    HStack(spacing: 6) {
+                        Image(systemName: "lock.fill")
+                            .font(.caption2)
+                            .foregroundStyle(.purple)
+                        Text("Visible to your designated person only")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
                     Text("Added \(media.createdAt.formatted(date: .abbreviated, time: .shortened))")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -173,11 +181,8 @@ struct MediaDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") {
-                        dismiss()
-                    }
+                    Button("Done") { dismiss() }
                 }
-                
                 ToolbarItem(placement: .destructiveAction) {
                     Button(role: .destructive) {
                         showingDeleteConfirmation = true
